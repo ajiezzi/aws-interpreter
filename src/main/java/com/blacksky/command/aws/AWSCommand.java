@@ -13,8 +13,8 @@ public abstract class AWSCommand implements Command {
 	private static final Logger logger = 
 			LoggerFactory.getLogger(AWSCommand.class);
 	
-	private static final String AWS_EXECUTABLE = "/usr/local/aws/bin/aws";
-	//private static final String AWS_EXECUTABLE = "aws";
+	//private static final String AWS_EXECUTABLE = "/usr/local/aws/bin/aws";
+	private static final String AWS_EXECUTABLE = "aws";
 	private static final String AWS = "aws ";
 	private static final String EMPTY_COLUMN_VALUE = "";
 	protected static final String TABLE_MAGIC_TAG = "%table ";

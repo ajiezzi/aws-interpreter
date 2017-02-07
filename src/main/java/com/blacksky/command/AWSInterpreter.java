@@ -35,8 +35,6 @@ public class AWSInterpreter extends Interpreter {
 	
 	private static final String TIMEOUT = "aws.cli.timeout.millis";
 	private static final String AWS_DEFAULT_REGION = "aws.cli.default.region";
-	private static final String AWS_ACCESS_KEY_ID = "aws.cli.key.id";
-	private static final String AWS_SECRET_ACCESS_KEY = "aws.cli.secret.key";
 	
 	ConcurrentHashMap<String, Command> commandMap;
 	
@@ -87,6 +85,8 @@ public class AWSInterpreter extends Interpreter {
 			
 			// TODO: Should probably strip the double quotes somewhere else
 			interpreterCommand = interpreterCommand.replace("\"", "");
+			
+			// TODO: need to ensure this is in fact an AWS cli command
 			Command command = AWSCommandFactory.getCommand(interpreterCommand);
 			
 			commandMap.put(context.getParagraphId(), command);

@@ -3,6 +3,7 @@ package com.blacksky.command.aws;
 import java.util.regex.Pattern;
 
 import com.blacksky.command.Command;
+import com.blacksky.command.aws.descws.DescribeWorkSpaces;
 import com.blacksky.command.aws.listbuckets.ListBucketCommand;
 import com.blacksky.command.aws.listobjects.ListObjectCommand;
 import com.blacksky.command.aws.s3ls.S3LSBucketsCommand;
@@ -15,8 +16,7 @@ public class AWSCommandFactory {
 	private final static String S3API_LIST_OBJECTS = "^(%table.+)?(aws\\s)(s3api\\s)(list-objects).+";
 	private final static String S3_LS_BUCKETS = "^(%table.+)?(aws\\s)(s3\\s)(ls)";
 	private final static String S3_LS_OBJECTS = "^(%table.+)?(aws\\s)(s3\\s)(ls\\s)([0-9a-zA-Z:\\/-]+).+";
-	
-	private final static String DESC_WORKSPACES = "^(%table.+)?(aws\\s)(workspaces\\s)(describe-workspaces).+";
+	private final static String DESC_WORKSPACES = "^(%table.+)?(aws\\s)(workspaces\\s)(describe-workspaces)";
 	
 	public static Command getCommand(final String commandLine) {
 		
@@ -31,7 +31,7 @@ public class AWSCommandFactory {
 		} else if (Pattern.matches(S3_LS_OBJECTS, line)) {
 			return new S3LSObjectsCommand(line);
 		} else if (Pattern.matches(DESC_WORKSPACES, line)) {
-			return null;
+			return new DescribeWorkSpaces(line);
 		} else {
 			return new GenericCommand(line);
 		}
