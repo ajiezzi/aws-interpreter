@@ -20,11 +20,6 @@ import com.blacksky.command.aws.AWSCommandFactory;
  * AWS CLI interpreter for Zeppelin. At the moment, this interpreter 
  * will only format the following commands into the table display:
  * 
- * aws s3 ls
- * aws s3 ls <bucket>
- * aws s3api list-buckets
- * aws s3api list-objects --bucket <bucket>
- * 
  * @author adamiezzi
  *
  */
@@ -83,10 +78,6 @@ public class AWSInterpreter extends Interpreter {
 		
 		try {
 			
-			// TODO: Should probably strip the double quotes somewhere else
-			interpreterCommand = interpreterCommand.replace("\"", "");
-			
-			// TODO: need to ensure this is in fact an AWS cli command
 			Command command = AWSCommandFactory.getCommand(interpreterCommand);
 			
 			commandMap.put(context.getParagraphId(), command);

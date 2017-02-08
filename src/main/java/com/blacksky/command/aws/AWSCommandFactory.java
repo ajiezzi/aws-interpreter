@@ -11,6 +11,9 @@ import com.blacksky.command.aws.s3ls.S3LSObjectsCommand;
 
 public class AWSCommandFactory {
 
+	private static final String DOUBLE_QUOTES = "\"";
+	private static final String EMPTY_COLUMN_VALUE = "";
+	
 	// Ladies & Gentleman, welcome to the wonderful world of REGEX
 	private final static String S3API_LIST_BUCKETS = "^(%table.+)?(aws\\s)(s3api\\s)(list-buckets).+";
 	private final static String S3API_LIST_OBJECTS = "^(%table.+)?(aws\\s)(s3api\\s)(list-objects).+";
@@ -20,7 +23,7 @@ public class AWSCommandFactory {
 	
 	public static Command getCommand(final String commandLine) {
 		
-		String line = commandLine.trim();
+		String line = commandLine.trim().replace(DOUBLE_QUOTES, EMPTY_COLUMN_VALUE);
 		
 		if (Pattern.matches(S3API_LIST_BUCKETS, line)) {
 			return new ListBucketCommand(line);

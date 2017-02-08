@@ -83,7 +83,7 @@ public abstract class AWSCommand implements Command {
 			throw new IllegalArgumentException("Vulnerable command can not be executed.");
 		}
 		
-		logger.info("AWS command [" + dirtyline + "] is clean.");
+		logger.info("AWS command [" + line + "] is clean.");
 		
 		if (line.contains(TABLE_MAGIC_TAG)) {
 			this.isTableType = true;
