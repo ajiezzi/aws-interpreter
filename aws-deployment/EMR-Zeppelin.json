@@ -103,7 +103,7 @@
           },
           "CoreInstanceGroup": {
             "InstanceCount": 1,
-            "InstanceType": { "Ref" : "InstanceType"},
+            "InstanceType": "m1.medium",
             "Market": "ON_DEMAND",
             "Name": "Slaves"
           },
