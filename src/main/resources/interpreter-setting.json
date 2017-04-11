@@ -1,0 +1,21 @@
+[
+  {
+    "group": "aws",
+    "name": "aws",
+    "className": "com.blacksky.command.AWSInterpreter",
+    "properties": {
+      "aws.cli.timeout.millis": {
+        "envName": null,
+        "propertyName": "aws.cli.timeout.millis",
+        "defaultValue": "60000",
+        "description": "AWS CLI command time out in millisecs. Default = 60000"
+      },
+      "aws.cli.default.region": {
+        "envName": null,
+        "propertyName": "aws.cli.default.region",
+        "defaultValue": "us-east-1",
+        "description": "AWS Region. Default = us-east-1"
+      }
+    }
+  }
+]

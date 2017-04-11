@@ -1,0 +1,26 @@
+{
+    "Version": "2012-10-17",
+    "Statement": [
+        {
+            "Effect": "Allow",
+            "Resource": "*",
+            "Action": [
+                "ec2:Describe*",
+                "ec2:RunInstances",
+                "ec2:TerminateInstances",
+                "iam:GetRole",
+                "iam:GetRolePolicy",
+                "iam:ListInstanceProfiles",
+                "iam:ListRolePolicies",
+                "iam:PassRole",
+                "s3:Get*",
+                "s3:List*",
+                "application-autoscaling:RegisterScalableTarget",
+                "application-autoscaling:DeregisterScalableTarget",
+                "application-autoscaling:PutScalingPolicy",
+                "application-autoscaling:DeleteScalingPolicy",
+                "application-autoscaling:Describe*"
+            ]
+        }
+    ]
+}

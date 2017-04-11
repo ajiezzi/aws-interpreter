@@ -1,0 +1,10 @@
+target
+
+*.project
+*.classpath
+*.prefs
+*.settings
+*.log
+*.DS_Store
+
+log4j*
