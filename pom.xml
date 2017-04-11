@@ -35,7 +35,7 @@
   </dependencies>
   
   <build>
-  
+
   	<plugins>
   		
   		<plugin>
@@ -103,7 +103,7 @@
 				</execution>
 			</executions>
 		</plugin>
-  	
+
   	</plugins>
   
   </build>
@@ -124,4 +124,5 @@
     </plugins>
     
   </reporting>
+
 </project>
