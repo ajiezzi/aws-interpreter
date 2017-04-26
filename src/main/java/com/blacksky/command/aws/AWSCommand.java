@@ -24,7 +24,7 @@ public abstract class AWSCommand implements Command {
 	protected static final String SUM_RECURSIVE = "--summarize --recursive";
 	
 	// Ban arguments with ";","&&" and "|"
-	private final static String OS_COMMAND_WHITELIST = "[0-9A-Za-z%@:\\/\\s-]+";
+	private final static String OS_COMMAND_WHITELIST = "[0-9A-Za-z%@=:\\/\\s-]+";
 	
 	protected CLIClient cliClient;
 	private StringBuilder cleanArguments;
