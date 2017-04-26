@@ -15,6 +15,7 @@ public class AWSCommandFactory {
 	private static final String EMPTY_COLUMN_VALUE = "";
 	
 	// Ladies & Gentleman, welcome to the wonderful world of REGEX
+	private final static String AWS_CLI_COMMAND = "^(%table.+)?(aws\\s).+";
 	private final static String S3API_LIST_BUCKETS = "^(%table.+)?(aws\\s)(s3api\\s)(list-buckets).+";
 	private final static String S3API_LIST_OBJECTS = "^(%table.+)?(aws\\s)(s3api\\s)(list-objects).+";
 	private final static String S3_LS_BUCKETS = "^(%table.+)?(aws\\s)(s3\\s)(ls)";
@@ -24,6 +25,9 @@ public class AWSCommandFactory {
 	public static Command getCommand(final String commandLine) {
 		
 		String line = commandLine.trim().replace(DOUBLE_QUOTES, EMPTY_COLUMN_VALUE);
+		
+		if (!Pattern.matches(AWS_CLI_COMMAND, line))
+			throw new IllegalArgumentException("Not a valid AWS CLI command.");
 		
 		if (Pattern.matches(S3API_LIST_BUCKETS, line)) {
 			return new ListBucketCommand(line);
