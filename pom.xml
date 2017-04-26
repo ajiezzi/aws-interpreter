@@ -89,40 +89,9 @@
           		</execution>
         	</executions>
       	</plugin>
-      	<plugin>
-			<groupId>org.codehaus.mojo</groupId>
-			<artifactId>findbugs-maven-plugin</artifactId>
-			<version>3.0.4</version>
-			<executions>
-				<execution>
-					<id>run-findbugs</id>
-					<phase>verify</phase>
-					<goals>
-						<goal>check</goal>
-					</goals>
-				</execution>
-			</executions>
-		</plugin>
 
   	</plugins>
   
   </build>
-  <reporting>
-  
-    <plugins>
-    
-      <plugin>
-        <groupId>org.codehaus.mojo</groupId>
-        <artifactId>findbugs-maven-plugin</artifactId>
-        <version>3.0.4</version>
-        <configuration>
-          <xmlOutput>true</xmlOutput>
-          <xmlOutputDirectory>target/site</xmlOutputDirectory>
-        </configuration>
-      </plugin>
-      
-    </plugins>
-    
-  </reporting>
 
 </project>
