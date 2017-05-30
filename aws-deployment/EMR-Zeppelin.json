@@ -11,12 +11,8 @@
       "Type": "String",
       "Default": "s3.amazonaws.com"
     },
-    "AvailabilityZone": {
-      "Description": "Availability Zone to deploy the EMR Cluster",
-      "Type": "AWS::EC2::AvailabilityZone::Name"
-    },
     "InstanceType": {
-      "Description": "Type of EC2 instance to launch.",
+      "Description": "Type of EC2 instance to use for EMR cluster.",
       "Type": "String",
       "Default": "m3.xlarge",
       "AllowedValues": [
@@ -103,7 +99,7 @@
           },
           "CoreInstanceGroup": {
             "InstanceCount": 1,
-            "InstanceType": "m1.medium",
+            "InstanceType": { "Ref" : "InstanceType"},
             "Market": "ON_DEMAND",
             "Name": "Slaves"
           },
@@ -139,11 +135,11 @@
         ],
         "BootstrapActions": [
           {
-  		    "Name": "Copy Artifacts",
-  			"ScriptBootstrapAction": {
-  			  "Path": "s3://zeppelin-emr-config-test/bootstrap_base.sh"
-			}
-		  }
+  		      "Name": "Copy Artifacts",
+  			       "ScriptBootstrapAction": {
+  			         "Path": "s3://zeppelin-emr-config-test/bootstrap_base.sh"
+			         }
+		      }
         ],
         "Tags": [
           { "Key": "Owner", "Value": "Spaceflight" },
