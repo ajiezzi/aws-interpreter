@@ -133,14 +133,6 @@
             ]
           }
         ],
-        "BootstrapActions": [
-          {
-  		      "Name": "Copy Artifacts",
-  			       "ScriptBootstrapAction": {
-  			         "Path": "s3://zeppelin-emr-config-test/bootstrap_base.sh"
-			         }
-		      }
-        ],
         "Tags": [
           { "Key": "Owner", "Value": "Spaceflight" },
           { "Key": "Purpose", "Value": "OpenDataStore" }
