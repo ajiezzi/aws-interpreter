@@ -39,4 +39,9 @@ For additional information on how to configure the Zeppelin interpreters, follow
 
 To utilize the AWS interpreter with your notebook, ensure the notebook is bound to the AWS interpreter using the setting icon on upper right corner of the notebook.
 
-## Contributing
+## Some Zeppelin eye candy
+
+<p align="center">
+	<a href="https://raw.githubusercontent.com/ajiezzi/aws-interpreter/master/docs/images/image_001.png" target="_blank"><img align="center" src="https://raw.githubusercontent.com/ajiezzi/aws-interpreter/master/docs/images/image_001.png" alt="Browse S3 buckets using Zeppelin"></a><br/><br/>
+	<a href="https://raw.githubusercontent.com/ajiezzi/aws-interpreter/master/docs/images/image_002.png" target="_blank"><img align="center" src="https://raw.githubusercontent.com/ajiezzi/aws-interpreter/master/docs/images/image_002.png" alt="List and graph objects stored in S3 buckets using Zeppelin"></a><br/><br/>
+</p>
