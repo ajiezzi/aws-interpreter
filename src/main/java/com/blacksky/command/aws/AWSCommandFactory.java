@@ -3,6 +3,7 @@ package com.blacksky.command.aws;
 import java.util.regex.Pattern;
 
 import com.blacksky.command.Command;
+import com.blacksky.command.CommandExecuter;
 import com.blacksky.command.aws.descws.DescribeWorkSpaces;
 import com.blacksky.command.aws.listbuckets.ListBucketCommand;
 import com.blacksky.command.aws.listobjects.ListObjectCommand;
@@ -22,7 +23,7 @@ public class AWSCommandFactory {
 	private final static String S3_LS_OBJECTS = "^(%table.+)?(aws\\s)(s3\\s)(ls\\s)([0-9a-zA-Z:\\/-]+).+";
 	private final static String DESC_WORKSPACES = "^(%table.+)?(aws\\s)(workspaces\\s)(describe-workspaces)";
 	
-	public static Command getCommand(final String commandLine) {
+	public static Command getCommand(final String commandLine, final CommandExecuter executer) {
 		
 		String line = commandLine.trim().replace(DOUBLE_QUOTES, EMPTY_COLUMN_VALUE);
 		
@@ -30,17 +31,17 @@ public class AWSCommandFactory {
 			throw new IllegalArgumentException("Not a valid AWS CLI command.");
 		
 		if (Pattern.matches(S3API_LIST_BUCKETS, line)) {
-			return new ListBucketCommand(line);
+			return new ListBucketCommand(line, executer);
 		} else if (Pattern.matches(S3API_LIST_OBJECTS, line)) {
-			return new ListObjectCommand(line);
+			return new ListObjectCommand(line, executer);
 		} else if (Pattern.matches(S3_LS_BUCKETS, line)) {
-			return new S3LSBucketsCommand(line);
+			return new S3LSBucketsCommand(line, executer);
 		} else if (Pattern.matches(S3_LS_OBJECTS, line)) {
-			return new S3LSObjectsCommand(line);
+			return new S3LSObjectsCommand(line, executer);
 		} else if (Pattern.matches(DESC_WORKSPACES, line)) {
-			return new DescribeWorkSpaces(line);
+			return new DescribeWorkSpaces(line, executer);
 		} else {
-			return new GenericCommand(line);
+			return new GenericCommand(line, executer);
 		}
 		
 	}

@@ -14,6 +14,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import com.blacksky.command.aws.AWSCommandFactory;
+import com.blacksky.command.aws.CLIExecuter;
 
 
 /***
@@ -29,9 +30,9 @@ public class AWSInterpreter extends Interpreter {
 			LoggerFactory.getLogger(AWSInterpreter.class);
 	
 	private static final String TIMEOUT = "aws.cli.timeout.millis";
-	//private static final String AWS_DEFAULT_REGION = "aws.cli.default.region";
+	private static final String EXECUTER_KEY = "executer";
 	
-	ConcurrentHashMap<String, Command> commandMap;
+	private ConcurrentHashMap<String, Command> commandMap;
 	
 	public AWSInterpreter(Properties property) {
 		super(property);
@@ -44,15 +45,24 @@ public class AWSInterpreter extends Interpreter {
 	
 	@Override
 	public void cancel(InterpreterContext context) {
+		
 		Command command = commandMap.remove(context.getParagraphId());
 		if (command != null) {
-			command.close();
+			command.cancel();
 		}
+		
 	}
 
 	@Override
 	public void close() {
-		
+		 
+		for (String key : commandMap.keySet()) {
+			Command command = commandMap.remove(key);
+			if (command != null) {
+				command.cancel();
+			}
+		}
+	    
 	}
 
 	@Override
@@ -74,11 +84,24 @@ public class AWSInterpreter extends Interpreter {
 	@Override
 	public InterpreterResult interpret(String interpreterCommand, InterpreterContext context) {
 		
+		CommandExecuter executer = null;
+		
 		logger.info("Interpreting AWS command '" + interpreterCommand + "'");
 		
 		try {
 			
-			Command command = AWSCommandFactory.getCommand(interpreterCommand);
+			if (!context.getConfig().isEmpty() && context.getConfig().containsKey(EXECUTER_KEY)) {
+				executer = (CommandExecuter) context.getConfig().get(EXECUTER_KEY);
+			} else {
+				executer = new CLIExecuter();
+			}
+				
+			Command command = 
+					AWSCommandFactory
+					.getCommand(
+							interpreterCommand,
+							executer
+							);
 			
 			commandMap.put(context.getParagraphId(), command);
 			
@@ -110,5 +133,6 @@ public class AWSInterpreter extends Interpreter {
 		}	
 		
 	}
+	
 	
 }

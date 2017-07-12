@@ -4,6 +4,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import com.blacksky.command.CommandException;
+import com.blacksky.command.CommandExecuter;
 import com.blacksky.command.CommandResult;
 
 
@@ -12,12 +13,12 @@ public class GenericCommand extends AWSCommand {
 	private static final Logger logger = 
 			LoggerFactory.getLogger(GenericCommand.class);
 	
-	public GenericCommand() {
+	/*public GenericCommand() {
 		super();
-	}
+	}*/
 	
-	public GenericCommand(final String command) {
-		super(command);
+	public GenericCommand(final String command, final CommandExecuter executer) {
+		super(command, executer);
 	}
 	
 	public CommandResult executeCommand(final long timeout) throws CommandException {
@@ -28,7 +29,8 @@ public class GenericCommand extends AWSCommand {
 		try {
 			
 			result.append(
-					cliClient.issueCLICommand(
+					
+					executer.executeCommand(
 							this, 
 							timeout
 							)

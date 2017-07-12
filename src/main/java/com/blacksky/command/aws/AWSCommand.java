@@ -7,13 +7,13 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import com.blacksky.command.Command;
+import com.blacksky.command.CommandExecuter;
 
 public abstract class AWSCommand implements Command {
 
 	private static final Logger logger = 
 			LoggerFactory.getLogger(AWSCommand.class);
 	
-	//private static final String AWS_EXECUTABLE = "/usr/local/aws/bin/aws";
 	private static final String AWS_EXECUTABLE = "aws";
 	private static final String AWS = "aws ";
 	private static final String EMPTY_COLUMN_VALUE = "";
@@ -26,20 +26,20 @@ public abstract class AWSCommand implements Command {
 	// Ban arguments with ";","&&" and "|"
 	private final static String OS_COMMAND_WHITELIST = "[0-9A-Za-z%@=:\\/\\s-]+";
 	
-	protected CLIClient cliClient;
+	protected CommandExecuter executer;
 	private StringBuilder cleanArguments;
 	
 	private boolean secureCommand = true;
 	private boolean isTableType = false;
 	private boolean isSummary = false;
 	
-	public AWSCommand() {
+	public AWSCommand(final CommandExecuter executer) {
 		this.cleanArguments = new StringBuilder();
-		this.cliClient = new CLIClient();
+		this.executer = executer;
 	}
 	
-	public AWSCommand(final String command) {
-		this();
+	public AWSCommand(final String command, final CommandExecuter executer) {
+		this(executer);
 		this.cleanArguments = 
 				new StringBuilder(
 						cleanAndSanitize(command)
@@ -114,10 +114,8 @@ public abstract class AWSCommand implements Command {
 		return this.isSummary;
 	}
 	
-	public void close() {
-		if (this.cliClient.getExecutor() != null) {
-			this.cliClient.getExecutor().getWatchdog().destroyProcess();
-		}
+	public void cancel() {
+		this.executer.cancelCommand();
 	}
 	
 }

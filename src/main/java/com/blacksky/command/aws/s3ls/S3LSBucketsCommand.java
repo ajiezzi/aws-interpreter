@@ -7,6 +7,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import com.blacksky.command.CommandException;
+import com.blacksky.command.CommandExecuter;
 import com.blacksky.command.CommandResult;
 import com.blacksky.command.aws.AWSCommand;
 import com.blacksky.command.aws.AWSCommandResult;
@@ -26,10 +27,8 @@ public class S3LSBucketsCommand extends AWSCommand {
 	private final static int CREATION_TIME_GROUP = 1;
 	private final static int BUCKET_NAME_GROUP = 2;  
 	
-	public S3LSBucketsCommand() {}
-	
-	public S3LSBucketsCommand(final String command) {
-		super(command);
+	public S3LSBucketsCommand(final String command, final CommandExecuter executer) {
+		super(command, executer);
 	}
 	
 	public CommandResult executeCommand(long timeout) throws CommandException {
@@ -40,7 +39,7 @@ public class S3LSBucketsCommand extends AWSCommand {
 		try {
 			
 			String output = 
-					cliClient.issueCLICommand(this, timeout);
+					executer.executeCommand(this, timeout);
 			
 			if (isTableType()) {
 				
