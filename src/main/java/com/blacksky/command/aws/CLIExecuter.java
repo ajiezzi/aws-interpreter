@@ -5,7 +5,6 @@ import java.io.IOException;
 import java.nio.charset.StandardCharsets;
 
 import org.apache.commons.exec.DefaultExecutor;
-import org.apache.commons.exec.ExecuteException;
 import org.apache.commons.exec.ExecuteWatchdog;
 import org.apache.commons.exec.Executor;
 import org.apache.commons.exec.PumpStreamHandler;
@@ -13,8 +12,9 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import com.blacksky.command.Command;
+import com.blacksky.command.CommandExecuter;
 
-public class CLIClient {
+public class CLIExecuter implements CommandExecuter {
 
 	private static final Logger logger = 
 			LoggerFactory.getLogger(AWSCommand.class);
@@ -22,16 +22,16 @@ public class CLIClient {
 	private long DEFAULT_TIMEOUT = 60000;
 	private int BUFFER_SIZE = 1024;
 	
-	final Executor executor;
+	private Executor executor;
 	
-	public CLIClient() {
+	public CLIExecuter() {
 		this.executor = new DefaultExecutor();
 	}
 
-	public String issueCLICommand(
+	public String executeCommand(
 			final Command command,
 			long timeout) 
-					throws ExecuteException, IOException {
+					throws Exception {
 		
 		final ByteArrayOutputStream os = new ByteArrayOutputStream(BUFFER_SIZE);
 		String result = null;
@@ -79,8 +79,15 @@ public class CLIClient {
 		
 	}
 	
-	public Executor getExecutor() {
-		return this.executor;
+	public void cancelCommand() {
+		logger.info("Cancelling AWS CLI command.");
+		if (this.executor != null) {
+			try {
+				executor.getWatchdog().destroyProcess();
+		    } catch (Exception e){
+		    	logger.error("Error destroying executor.");
+		    }
+		}
 	}
 	
 }

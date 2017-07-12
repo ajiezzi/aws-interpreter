@@ -14,6 +14,6 @@ public interface Command {
 	public CommandResult executeCommand(final long timeout) 
 			throws CommandException;
 	
-	public void close();
+	public void cancel();
 	
 }

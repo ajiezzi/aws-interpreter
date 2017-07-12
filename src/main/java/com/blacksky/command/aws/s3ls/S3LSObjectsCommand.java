@@ -7,6 +7,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import com.blacksky.command.CommandException;
+import com.blacksky.command.CommandExecuter;
 import com.blacksky.command.CommandResult;
 import com.blacksky.command.aws.AWSCommand;
 import com.blacksky.command.aws.AWSCommandResult;
@@ -42,12 +43,8 @@ public class S3LSObjectsCommand extends AWSCommand {
 	private final Pattern patternObject = Pattern.compile(AWS_LS_TOTAL_OBJECTS);
 	private final Pattern patternSize = Pattern.compile(AWS_LS_TOTAL_SIZE);
 	
-	public S3LSObjectsCommand() {
-		super();
-	}
-	
-	public S3LSObjectsCommand(final String command) {
-		super(command);
+	public S3LSObjectsCommand(final String command, final CommandExecuter executer) {
+		super(command, executer);
 	}
 	
 	public CommandResult executeCommand(final long timeout) throws CommandException {
@@ -58,7 +55,7 @@ public class S3LSObjectsCommand extends AWSCommand {
 		try {
 			
 			String output = 
-					cliClient.issueCLICommand(
+					executer.executeCommand(
 							this, 
 							timeout
 							).toString();

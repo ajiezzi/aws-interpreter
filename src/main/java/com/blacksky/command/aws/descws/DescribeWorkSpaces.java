@@ -4,6 +4,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import com.blacksky.command.CommandException;
+import com.blacksky.command.CommandExecuter;
 import com.blacksky.command.CommandResult;
 import com.blacksky.command.aws.AWSCommand;
 import com.blacksky.command.aws.AWSCommandResult;
@@ -26,8 +27,8 @@ public class DescribeWorkSpaces extends AWSCommand {
 			DIR_ID + TAB + STATE + TAB + WORKSPACE_ID + TAB + 
 			SUBNET_ID + TAB + IP_ADDRESS + TAB + BUNDLE_ID;
 	
-	public DescribeWorkSpaces(final String command) {
-		super(command);
+	public DescribeWorkSpaces(final String command, final CommandExecuter executer) {
+		super(command, executer);
 	}
 	
 	public CommandResult executeCommand(long timeout) throws CommandException {
@@ -45,7 +46,7 @@ public class DescribeWorkSpaces extends AWSCommand {
 					super.addArgument(JSON_OUTPUT);
 					
 				String output = 
-						cliClient.issueCLICommand(
+						executer.executeCommand(
 								this, 
 								timeout
 								);
@@ -71,7 +72,7 @@ public class DescribeWorkSpaces extends AWSCommand {
 					
 			} else {
 				sb.append(
-						cliClient.issueCLICommand(
+						executer.executeCommand(
 								this, 
 								timeout)
 						);

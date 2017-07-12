@@ -4,6 +4,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import com.blacksky.command.CommandException;
+import com.blacksky.command.CommandExecuter;
 import com.blacksky.command.CommandResult;
 import com.blacksky.command.aws.AWSCommand;
 import com.blacksky.command.aws.AWSCommandResult;
@@ -23,12 +24,8 @@ public class ListObjectCommand extends AWSCommand {
 	private static final String HEADER_ROW = LAST_MODIFIED + TAB + 
 			ETag + TAB + STORAGE_CLASS + TAB + KEY + TAB + SIZE;
 	
-	public ListObjectCommand() {
-		super();
-	}
-	
-	public ListObjectCommand(final String command) {
-		super(command);
+	public ListObjectCommand(final String command, final CommandExecuter executer) {
+		super(command, executer);
 	}
 	
 	public CommandResult executeCommand(final long timeout) throws CommandException {
@@ -45,7 +42,7 @@ public class ListObjectCommand extends AWSCommand {
 					super.addArgument(JSON_OUTPUT);
 					
 				String output = 
-						cliClient.issueCLICommand(
+						executer.executeCommand(
 								this, 
 								timeout
 								);
@@ -70,7 +67,7 @@ public class ListObjectCommand extends AWSCommand {
 			} else {
 				
 				sb.append(
-						cliClient.issueCLICommand(
+						executer.executeCommand(
 								this, 
 								timeout)
 						);
@@ -85,5 +82,6 @@ public class ListObjectCommand extends AWSCommand {
 		return new AWSCommandResult(sb);
 		
 	}
+	
 
 }
