@@ -57,15 +57,17 @@ public class CLIExecuter implements CommandExecuter {
 				int exitValue = executor.execute(command.getCommandLine());
 				logger.info("Command returned with Executor exit value: " + exitValue);
 				
-				//if (exitValue == 0) {
+				if (exitValue != 0)
+					throw new Exception("Error. Invalid AWS CLI command.");
 					
-					result = new String(
+				result = new String(
 							os.toByteArray(), 
 							StandardCharsets.UTF_8
 							);
 					
-				//} 
-				
+			} catch (Exception e) {
+				logger.error(e.getMessage());
+				throw new Exception("Error. Invalid AWS CLI command.", e);
 			} finally {
 				try {
 					os.close();
