@@ -1,4 +1,4 @@
-package com.blacksky.command.aws.s3ls;
+package com.blacksky.command.aws.s3;
 
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
