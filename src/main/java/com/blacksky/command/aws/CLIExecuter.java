@@ -17,10 +17,9 @@ import com.blacksky.command.CommandExecuter;
 public class CLIExecuter implements CommandExecuter {
 
 	private static final Logger logger = 
-			LoggerFactory.getLogger(AWSCommand.class);
+			LoggerFactory.getLogger(CLIExecuter.class);
 	
-	private long DEFAULT_TIMEOUT = 60000;
-	private int BUFFER_SIZE = 1024;
+	private int BUFFER_SIZE = 1024 * 4;
 	
 	private Executor executor;
 	
@@ -30,7 +29,7 @@ public class CLIExecuter implements CommandExecuter {
 
 	public String executeCommand(
 			final Command command,
-			long timeout) 
+			final long timeout) 
 					throws Exception {
 		
 		final ByteArrayOutputStream os = new ByteArrayOutputStream(BUFFER_SIZE);
@@ -40,12 +39,9 @@ public class CLIExecuter implements CommandExecuter {
 			
 			try {
 				
-				if (timeout == 0)
-					timeout = DEFAULT_TIMEOUT;
+				ExecuteWatchdog watchDog = new ExecuteWatchdog(timeout);
 				
-				executor.setWatchdog(
-						new ExecuteWatchdog(timeout)
-						);
+				executor.setWatchdog(watchDog);
 					
 				executor.setStreamHandler(
 						new PumpStreamHandler(os, os)
@@ -57,9 +53,15 @@ public class CLIExecuter implements CommandExecuter {
 				int exitValue = executor.execute(command.getCommandLine());
 				logger.info("Command returned with Executor exit value: " + exitValue);
 				
-				if (exitValue != 0)
-					throw new Exception("Error. Invalid AWS CLI command.");
+				if (executor.isFailure(exitValue)) {
+					if (watchDog.killedProcess()) {
+						throw new Exception("Interpreter process destroyed. Please increase timeout property.");
+					} else {
+						throw new Exception("Invalid AWS CLI command.");
+					}
 					
+				}
+				
 				result = new String(
 							os.toByteArray(), 
 							StandardCharsets.UTF_8

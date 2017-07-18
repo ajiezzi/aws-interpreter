@@ -25,7 +25,6 @@ public class GenericCommand extends AWSCommand {
 		try {
 			
 			result.append(
-					
 					executer.executeCommand(
 							this, 
 							timeout
