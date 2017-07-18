@@ -13,10 +13,6 @@ public class GenericCommand extends AWSCommand {
 	private static final Logger logger = 
 			LoggerFactory.getLogger(GenericCommand.class);
 	
-	/*public GenericCommand() {
-		super();
-	}*/
-	
 	public GenericCommand(final String command, final CommandExecuter executer) {
 		super(command, executer);
 	}

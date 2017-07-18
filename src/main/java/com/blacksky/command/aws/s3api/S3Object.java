@@ -1,4 +1,4 @@
-package com.blacksky.command.aws.listobjects;
+package com.blacksky.command.aws.s3api;
              
 public class S3Object {
 
@@ -7,6 +7,7 @@ public class S3Object {
 	private String StorageClass;
 	private String Key;
 	private int Size;
+	private boolean IsLatest;
 	
 	public S3Object() {}
 
@@ -48,6 +49,14 @@ public class S3Object {
 
 	public void setSize(int size) {
 		Size = size;
+	}
+
+	public boolean getIsLatest() {
+		return IsLatest;
+	}
+
+	public void setIsLatest(boolean isLatest) {
+		IsLatest = isLatest;
 	}
 	
 }

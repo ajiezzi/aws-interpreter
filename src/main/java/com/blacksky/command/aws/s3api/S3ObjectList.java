@@ -1,4 +1,4 @@
-package com.blacksky.command.aws.listobjects;
+package com.blacksky.command.aws.s3api;
 
 import java.util.List;
 
