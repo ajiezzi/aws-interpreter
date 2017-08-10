@@ -107,7 +107,7 @@
           "Ec2KeyName" : { "Ref" : "KeyPair"},
           "Ec2SubnetId" : { "Ref" : "SubnetID" }
         },
-        "Name": "OpenDataStore-EMR-Zeppelin",
+        "Name": "EMR-Zeppelin",
         "JobFlowRole" : { "Ref" : "ElasticMapReduceInstanceRole" },
         "ServiceRole" : { "Ref" : "ElasticMapReduceServiceRole" },
         "ReleaseLabel" : { "Ref" : "ReleaseLabel" },
@@ -134,8 +134,8 @@
           }
         ],
         "Tags": [
-          { "Key": "Owner", "Value": "Spaceflight" },
-          { "Key": "Purpose", "Value": "OpenDataStore" }
+          { "Key": "Owner", "Value": "AdamIezzi" },
+          { "Key": "Purpose", "Value": "Analytics" }
         ]
       }
     }
