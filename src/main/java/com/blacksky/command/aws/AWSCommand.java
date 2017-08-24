@@ -20,18 +20,17 @@ public abstract class AWSCommand implements Command {
 	protected static final String TABLE_MAGIC_TAG = "%table ";
 	protected static final char NEWLINE = '\n';
 	protected static final char TAB = '\t';
+	protected static final String SPACE = " ";
 	protected static final String JSON_OUTPUT = " --output json";
-	protected static final String SUM_RECURSIVE = "--summarize --recursive";
 	
 	// Ban arguments with ";","&&" and "|"
-	private final static String OS_COMMAND_WHITELIST = "[0-9A-Za-z%@\\.:\\/\\s-]+";
+	private final static String OS_COMMAND_WHITELIST = "[0-9A-Za-z%@=,\"\\{\\}\\[\\]\\'\\.:\\/\\s-]+";
 	
 	protected CommandExecuter executer;
 	private StringBuilder cleanArguments;
 	
 	private boolean secureCommand = true;
 	private boolean isTableType = false;
-	private boolean isSummary = false;
 	
 	public AWSCommand(final CommandExecuter executer) {
 		this.cleanArguments = new StringBuilder();
@@ -61,7 +60,8 @@ public abstract class AWSCommand implements Command {
 	public CommandLine getCommandLine() {
 		CommandLine commandLine = new CommandLine(AWS_EXECUTABLE);
 		commandLine.addArguments(
-				this.cleanArguments.toString()
+				getCleanedArgumentsAsString().split(SPACE),
+				false
 				);
 		return commandLine;
 	}
@@ -74,28 +74,26 @@ public abstract class AWSCommand implements Command {
         
 		String line = dirtyline;
 	
-		if (line == null) 
-			throw new IllegalArgumentException("Command can not be null.");
-			
-		if (line.trim().length() == 0) 
-		    throw new IllegalArgumentException("Command can not be empty.");
+		if (line == null || line.trim().length() == 0) 
+			throw new IllegalArgumentException("Command can not be empty.");
 		
+		// Prevent OS command injection
 		if (!Pattern.matches(OS_COMMAND_WHITELIST, line)) {
 			this.secureCommand = false;
 			throw new IllegalArgumentException("Vulnerable command can not be executed.");
 		}
 		
-		logger.info("AWS command [" + line + "] is clean.");
+		logger.info("AWS command (" + line + ") is clean.");
 		
+		// Determine if table tag '%table' is present
 		if (line.contains(TABLE_MAGIC_TAG)) {
 			this.isTableType = true;
+			line = line.substring(1, line.length() - 1); // chop off first and last quotes
+			line = !line.contains(JSON_OUTPUT) ? (line + JSON_OUTPUT) : line;
 			line = line.replace(TABLE_MAGIC_TAG, EMPTY_COLUMN_VALUE);
 		}
 		
-		if (line.contains(SUM_RECURSIVE)) {
-			this.isSummary = true;
-		}
-			
+		// if present, remove the AWS command executable
 		line = line.replace(AWS, EMPTY_COLUMN_VALUE);
 		
 		return line;
@@ -108,10 +106,6 @@ public abstract class AWSCommand implements Command {
 	
 	public boolean isTableType() {
 		return this.isTableType;
-	}
-	
-	public boolean isSummary() {
-		return this.isSummary;
 	}
 	
 	public void cancel() {

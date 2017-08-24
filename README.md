@@ -2,24 +2,30 @@
 
 The AWS Interpreter for Apache Zeppelin allows you to execute AWS CLI commands from a Zeppelin notebook as well as visualize the results.
 
-The interpreter allows you to execute any AWS CLI command, but will currently only format the following commands into the table display:
+The interpreter allows you to execute any AWS CLI command, but will currently only format JSON responses that are lists of JSON objects. Therefore, in order to have the output formatted, the following parameters should be considered:
 
-```
-%aws aws s3 ls
-%aws aws s3 ls <bucket>
-%aws aws s3api list-buckets
-%aws aws s3api list-objects --bucket <bucket>
-%aws aws workspaces describe-workspaces
-```
+`--output json` - Formats the command output into valid JSON
+
+`--query (string)` - A JMESPath query to use in filtering the response data. The parameter can be used to either filter or structure the reponse data into a list of JSON objects. Additional information can be found at http://jmespath.org/tutorial.html 
+
+Below is an example of a valid CLI request to visualize the output using Zeppelin's visualization:
+
+`%aws "%table aws s3api list-objects --bucket test- --output json --query 'Contents[]'"` 
 
 ## Building
 
-At a minimum you will need a JVM and Maven installed. To build everything from the root directory of the project, execute the following command to build the source and package/copy the dependencies.
+At a minimum you will need a JVM and Maven installed. To build everything from the root directory of the project, execute the following command to build the source and package/copy the dependencies. The interpreter requires Java 1.8.
 
 ```
 $ mvn clean install
 ```
-Maven will create two Java artifacts, aws-interpreter-0.0.1-SNAPSHOT.jar and commons-exec-1.3.jar.
+Maven will create the following Java artifacts:
+
+* aws-interpreter-0.0.1-SNAPSHOT.jar
+* commons-exec-1.3.jar
+* jackson-annotations-2.8.8.jar
+* jackson-core-2.8.8.jar
+* jackson-databind-2.8.8.jar
 
 ## Installation and Configuration
 
@@ -31,7 +37,7 @@ The instructions assume both Java artifacts are already copied to the EMR master
 2. Copy the two Java artifacts (aws-interpreter-0.0.1-SNAPSHOT.jar & commons-exec-1.3.jar) into the newly created directory
 3. Add the AWS interpreter class `com.blacksky.command.AWSInterpreter` name to the zeppelin.interpreters property in `conf/zeppelin-site.xml`
 4. Stop and start the Zeppelin service (e.g. `stop zeppelin` & `start zeppelin`)
-5. In the interpreter web page (e.g. http://<host>/interpreter), click the Create button and configure the interpreter properties. Name should be `aws` and group should be `aws`. All other properties can be left as the defaults.
+5. In the interpreter web page (e.g. http://YOUR_DOMAIN_NAME/interpreter), click the Create button and configure the interpreter properties. Name should be `aws` and group should be `aws`. All other properties can be left as the defaults.
 
 For additional information on how to configure the Zeppelin interpreters, follow the directions at http://zeppelin.apache.org/docs/latest/development/writingzeppelininterpreter.html#configure-your-interpreter .
 
