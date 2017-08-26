@@ -1,5 +1,8 @@
 package com.blacksky.command.aws;
 
+import java.util.ArrayList;
+import java.util.List;
+import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 import org.apache.commons.exec.CommandLine;
@@ -22,56 +25,38 @@ public abstract class AWSCommand implements Command {
 	protected static final char TAB = '\t';
 	protected static final String SPACE = " ";
 	protected static final String JSON_OUTPUT = " --output json";
+	protected static final String REGEX_PATTERN = "('[^']*'|[^ ]+)";
 	
 	// Ban arguments with ";","&&" and "|"
 	private final static String OS_COMMAND_WHITELIST = "[0-9A-Za-z%@=,\"\\{\\}\\[\\]\\'\\.:\\/\\s-]+";
 	
 	protected CommandExecuter executer;
-	private StringBuilder cleanArguments;
 	
-	private boolean secureCommand = true;
+	private boolean secureCommand = false;
 	private boolean isTableType = false;
+	private List<String> cleanedArgs;
 	
 	public AWSCommand(final CommandExecuter executer) {
-		this.cleanArguments = new StringBuilder();
 		this.executer = executer;
 	}
 	
 	public AWSCommand(final String command, final CommandExecuter executer) {
 		this(executer);
-		this.cleanArguments = 
-				new StringBuilder(
-						cleanAndSanitize(command)
-						);
-	}
-	
-	public void addArgument(final String argument) {
-		this.cleanArguments.append(
-				cleanAndSanitize(argument)
-				);
-	}
-	
-	public void addArguments(final String[] arguments) {
-		for (String s : arguments) {
-			this.addArgument(s);
-		}
+		this.cleanedArgs = cleanAndSanitize(command);
 	}
 	
 	public CommandLine getCommandLine() {
+		
 		CommandLine commandLine = new CommandLine(AWS_EXECUTABLE);
-		commandLine.addArguments(
-				getCleanedArgumentsAsString().split(SPACE),
-				false
-				);
+		getCleanedArgs().forEach(arg -> commandLine.addArgument(arg, true));
+		
 		return commandLine;
 	}
 	
-	public String getCleanedArgumentsAsString() {
-		return this.cleanArguments.toString();
-	}
-	
-	private String cleanAndSanitize(final String dirtyline) {
+	private List<String> cleanAndSanitize(final String dirtyline) {
         
+		final List<String> arguments = new ArrayList<String>();
+		
 		String line = dirtyline;
 	
 		if (line == null || line.trim().length() == 0) 
@@ -93,10 +78,19 @@ public abstract class AWSCommand implements Command {
 			line = line.replace(TABLE_MAGIC_TAG, EMPTY_COLUMN_VALUE);
 		}
 		
-		// if present, remove the AWS command executable
+		// find and replace the AWS command executable
 		line = line.replace(AWS, EMPTY_COLUMN_VALUE);
 		
-		return line;
+		// Parse the remaining arguments into a list
+		Matcher matcher = Pattern.compile(REGEX_PATTERN).matcher(line);
+		
+		while(matcher.find()) {
+			arguments.add(matcher.group(1).replaceAll(SPACE, EMPTY_COLUMN_VALUE));
+		}
+		
+		this.secureCommand = true;
+		
+		return arguments;
 		
 	}
 
@@ -110,6 +104,10 @@ public abstract class AWSCommand implements Command {
 	
 	public void cancel() {
 		this.executer.cancelCommand();
+	}
+
+	public List<String> getCleanedArgs() {
+		return cleanedArgs;
 	}
 	
 }
