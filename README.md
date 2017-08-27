@@ -1,6 +1,6 @@
 # AWS Interpreter for Apache Zeppelin
 
-The AWS Interpreter for Apache Zeppelin allows you to execute AWS CLI commands from a Zeppelin notebook as well as visualize the results.
+The AWS Interpreter for Apache Zeppelin allows you to execute AWS Command Line Interface (CLI) commands from a Zeppelin notebook as well as visualize the results. The AWS Command Line Interface is a unified tool to manage your AWS services.
 
 The interpreter allows you to execute any AWS CLI command, but will currently only format JSON responses that are lists of JSON objects. Therefore, in order to have the output formatted, the following parameters should be considered:
 
@@ -11,6 +11,8 @@ The interpreter allows you to execute any AWS CLI command, but will currently on
 Below is an example of a valid CLI request to visualize the output using Zeppelin's visualization:
 
 `%aws "%table aws s3api list-objects --bucket test- --output json --query 'Contents[]'"` 
+
+For additional information, please check out the AWS CLI command reference: http://docs.aws.amazon.com/cli/latest/reference/index.html
 
 ## Building
 
