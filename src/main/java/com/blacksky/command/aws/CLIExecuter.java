@@ -33,6 +33,7 @@ public class CLIExecuter implements CommandExecuter {
 					throws Exception {
 		
 		final ByteArrayOutputStream os = new ByteArrayOutputStream(BUFFER_SIZE);
+		final ByteArrayOutputStream es = new ByteArrayOutputStream(BUFFER_SIZE);
 		String result = null;
 		
 		if (command.isSecure()) {
@@ -44,7 +45,7 @@ public class CLIExecuter implements CommandExecuter {
 				executor.setWatchdog(watchDog);
 					
 				executor.setStreamHandler(
-						new PumpStreamHandler(os, os)
+						new PumpStreamHandler(os, es)
 						);
 				
 				logger.info("Issuing Command with arguments " 
@@ -68,11 +69,17 @@ public class CLIExecuter implements CommandExecuter {
 							);
 					
 			} catch (Exception e) {
-				logger.error(e.getMessage());
-				throw new Exception("Error. Invalid AWS CLI command.", e);
+				String errorMsg = 
+						new String(
+								es.toByteArray(), 
+								StandardCharsets.UTF_8
+								);
+				logger.error(e.getMessage() + errorMsg);
+				throw new Exception("Invalid AWS CLI command. " + errorMsg, e);
 			} finally {
 				try {
 					os.close();
+					es.close();
 				} catch (IOException e) {
 					e.printStackTrace();
 				}
