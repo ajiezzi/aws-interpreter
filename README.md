@@ -11,12 +11,11 @@ The interpreter allows you to execute any AWS CLI command, but will currently on
 Below are examples of a valid CLI requests which can be added to a basic chart using Zeppelin's visualization:
 
 ```
-"%table aws s3api list-objects --bucket test-bucket-001 --output json --query 'Contents[]'"
+%aws "%table aws s3api list-objects --bucket test-bucket-001 --output json --query 'Contents[]'"
 
-"%table aws ec2 describe-instances --filters 'Name=instance-state-name,Values=running,stopped' --query 'Reservations[].Instances[].{Id:InstanceId,Type:InstanceType,CreateDate:LaunchTime,State:State.Name}' --region us-east-1 --output json"
+%aws "%table aws ec2 describe-instances --filters 'Name=instance-state-name,Values=running,stopped' --query 'Reservations[].Instances[].{Id:InstanceId,Type:InstanceType,CreateDate:LaunchTime,State:State.Name}' --region us-east-1 --output json"
 
-"%table aws s3api list-buckets --query 'Buckets[]' --output json"
-
+%aws "%table aws s3api list-buckets --query 'Buckets[]' --output json"
 ```
 
 For additional information, please check out the AWS CLI command reference: http://docs.aws.amazon.com/cli/latest/reference/index.html
@@ -51,5 +50,6 @@ To utilize the AWS interpreter with your notebook, ensure the notebook is bound 
 ## Some Zeppelin eye candy
 
 <p align="center">
-	
+	<a href="https://raw.githubusercontent.com/ajiezzi/aws-interpreter/master/docs/images/image_001.png" target="_blank"><img align="center" src="https://raw.githubusercontent.com/ajiezzi/aws-interpreter/master/docs/images/image_001.png" alt="S3 metrics using Zeppelin"></a><br/><br/>
+	<a href="https://raw.githubusercontent.com/ajiezzi/aws-interpreter/master/docs/images/image_002.png" target="_blank"><img align="center" src="https://raw.githubusercontent.com/ajiezzi/aws-interpreter/master/docs/images/image_002.png" alt="EC2 metrics using Zeppelin"></a><br/><br/>
 </p>
