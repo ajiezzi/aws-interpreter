@@ -2,9 +2,9 @@
   xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
   <modelVersion>4.0.0</modelVersion>
 
-  <groupId>com.blacksky.aws</groupId>
+  <groupId>com.blacksky</groupId>
   <artifactId>aws-interpreter</artifactId>
-  <version>0.0.1-SNAPSHOT</version>
+  <version>0.0.1</version>
   <packaging>jar</packaging>
   <name>Zeppelin: AWS interpreter</name>
   <description>Execute and display AWS CLI commands from a Zeppelin notebook</description>
@@ -65,48 +65,24 @@
           		</execution>
         	</executions>
       	</plugin>
-      	
       	<plugin>
-        	<artifactId>maven-dependency-plugin</artifactId>
-        	<executions>
-          		<execution>
-            		<id>copy-dependencies</id>
-            		<phase>package</phase>
-            		<goals>
-              			<goal>copy-dependencies</goal>
-            		</goals>
-            		<configuration>
-              			<outputDirectory>${project.build.directory}</outputDirectory>
-              			<overWriteReleases>false</overWriteReleases>
-              			<overWriteSnapshots>false</overWriteSnapshots>
-              			<overWriteIfNewer>true</overWriteIfNewer>
-              			<includeScope>runtime</includeScope>
-            		</configuration>
-          		</execution>
-          		<execution>
-            		<id>copy-artifact</id>
-            		<phase>package</phase>
-            		<goals>
-              			<goal>copy</goal>
-            		</goals>
-            		<configuration>
-              			<outputDirectory>${project.build.directory}</outputDirectory>
-              			<overWriteReleases>false</overWriteReleases>
-              			<overWriteSnapshots>false</overWriteSnapshots>
-              			<overWriteIfNewer>true</overWriteIfNewer>
-              			<includeScope>runtime</includeScope>
-              			<artifactItems>
-                			<artifactItem>
-                  				<groupId>${project.groupId}</groupId>
-                  				<artifactId>${project.artifactId}</artifactId>
-                  				<version>${project.version}</version>
-                  				<type>${project.packaging}</type>
-                			</artifactItem>
-              			</artifactItems>              
-            		</configuration>
-          		</execution>
-        	</executions>
-      	</plugin>
+    		<artifactId>maven-assembly-plugin</artifactId>
+    		<executions>
+      			<execution>
+        			<phase>package</phase>
+        			<goals>
+          				<goal>single</goal>
+        			</goals>
+      			</execution>
+    		</executions>
+    		<configuration>
+      			<archive>
+      			</archive>
+      			<descriptorRefs>
+        			<descriptorRef>jar-with-dependencies</descriptorRef>
+      			</descriptorRefs>
+    		</configuration>
+  		</plugin>
       	
   	</plugins>
   

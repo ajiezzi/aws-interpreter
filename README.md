@@ -2,7 +2,7 @@
 
 The AWS Interpreter for Apache Zeppelin allows you to execute AWS Command Line Interface (CLI) commands from a Zeppelin notebook as well as visualize the results. The AWS Command Line Interface is a unified tool to manage your AWS services.
 
-The interpreter allows you to execute any AWS CLI command, but will currently only format JSON responses that are lists of JSON objects. Therefore, in order to have the output formatted, the following parameters should be considered:
+The interpreter allows you to execute any AWS CLI command, but will currently only format JSON responses that are lists of JSON objects. Therefore, in order to have the output formatted, the following parameters should be used:
 
 `--output json` - Formats the command output into valid JSON
 
@@ -21,13 +21,7 @@ At a minimum you will need a JVM and Maven installed. To build everything from t
 ```
 $ mvn clean install
 ```
-Maven will create the following Java artifacts:
-
-* aws-interpreter-0.0.1-SNAPSHOT.jar
-* commons-exec-1.3.jar
-* jackson-annotations-2.8.8.jar
-* jackson-core-2.8.8.jar
-* jackson-databind-2.8.8.jar
+Maven will create the a fat jar (e.g. aws-interpreter-0.0.1-SNAPSHOT-jar-with-dependencies.jar) which has all of the dependencies.
 
 ## Installation and Configuration
 
@@ -36,7 +30,7 @@ Maven will create the following Java artifacts:
 The instructions assume both Java artifacts are already copied to the EMR master server. Zeppelin home will be found at `/usr/lib/zeppelin`. To configure the interpreter on EMR, you will need to follow these steps:
 
 1. Create a new directory called `aws` under `interpreter/` 
-2. Copy the two Java artifacts (aws-interpreter-0.0.1-SNAPSHOT.jar & commons-exec-1.3.jar) into the newly created directory
+2. Copy the Java artifact into the newly created directory
 3. Add the AWS interpreter class `com.blacksky.command.AWSInterpreter` name to the zeppelin.interpreters property in `conf/zeppelin-site.xml`
 4. Stop and start the Zeppelin service (e.g. `stop zeppelin` & `start zeppelin`)
 5. In the interpreter web page (e.g. http://YOUR_DOMAIN_NAME/interpreter), click the Create button and configure the interpreter properties. Name should be `aws` and group should be `aws`. All other properties can be left as the defaults.
