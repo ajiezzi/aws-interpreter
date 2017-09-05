@@ -8,9 +8,16 @@ The interpreter allows you to execute any AWS CLI command, but will currently on
 
 `--query (string)` - A JMESPath query to use in filtering the response data. The parameter can be used to either filter or structure the reponse data into a list of JSON objects. Additional information can be found at http://jmespath.org/tutorial.html 
 
-Below is an example of a valid CLI request to visualize the output using Zeppelin's visualization:
+Below are examples of a valid CLI requests which can be added to a basic chart using Zeppelin's visualization:
 
-`%aws "%table aws s3api list-objects --bucket test- --output json --query 'Contents[]'"` 
+```
+"%table aws s3api list-objects --bucket test-bucket-001 --output json --query 'Contents[]'"
+
+"%table aws ec2 describe-instances --filters 'Name=instance-state-name,Values=running,stopped' --query 'Reservations[].Instances[].{Id:InstanceId,Type:InstanceType,CreateDate:LaunchTime,State:State.Name}' --region us-east-1 --output json"
+
+"%table aws s3api list-buckets --query 'Buckets[]' --output json"
+
+```
 
 For additional information, please check out the AWS CLI command reference: http://docs.aws.amazon.com/cli/latest/reference/index.html
 
