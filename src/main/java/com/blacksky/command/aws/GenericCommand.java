@@ -49,9 +49,6 @@ public class GenericCommand extends AWSCommand {
 						(elements = rootNode.elements()).hasNext()) {
 					
 					final List<String> headerList = new ArrayList<String>();
-					//final Iterator<JsonNode> elements = rootNode.elements();
-					
-					//if (elements.hasNext()) {
 						
 					JsonNode node = elements.next();
 						
@@ -74,8 +71,6 @@ public class GenericCommand extends AWSCommand {
 							.asText() + NEWLINE
 							);
 											
-					//}
-
 					elements.forEachRemaining(
 							new Consumer<JsonNode>() {
 								public void accept(JsonNode node) {
