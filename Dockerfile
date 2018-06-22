@@ -44,9 +44,10 @@ RUN curl -O https://bootstrap.pypa.io/get-pip.py && \
 	pip install awscli
 	
 # Package AWS CLI intepreter into a fat jar
+WORKDIR ${I_HOME}
 ADD pom.xml ${I_HOME}/pom.xml
 ADD src ${I_HOME}/src
-RUN ["mvn", "clean", "install"]
+RUN mvn clean install
 	
 # Install AWS interpreter as a third-party interpreter
 RUN mvn install:install-file -Dfile=/${I_HOME}/target/aws-interpreter-0.0.1-jar-with-dependencies.jar -DgroupId=com.blacksky -DartifactId=aws-interpreter -Dversion=0.0.1 -Dpackaging=jar && \
