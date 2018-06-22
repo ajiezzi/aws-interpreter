@@ -13,14 +13,16 @@
 # docker run --rm -p 8080:8080 -e AWS_ACCESS_KEY_ID='xxxxx' \
 #  -e AWS_SECRET_ACCESS_KEY='xxxx' --name zeppelin adamiezzi/aws-zeppelin
 FROM centos:7
-MAINTAINER Adam Iezzi <aiezz@blacksky.com>
+MAINTAINER Adam Iezzi <aiezzi@blacksky.com>
 
 # Default Environment Variables
-ENV AWS_ACCESS_KEY_ID="" \
+ENV ENV Z_VERSION="0.7.3" \
+ 	Z_HOME="/zeppelin" \
+	AWS_ACCESS_KEY_ID="" \
 	AWS_SECRET_ACCESS_KEY="" \
 	AWS_DEFAULT_REGION="us-east-1" \
 	AWS_DEFAULT_OUTPUT="json" \
-    Z_HOME="/zeppelin"
+    I_HOME="/aws-interpreter"
 
 # Install required packages
 RUN yum install -y epel-release && \
@@ -30,21 +32,25 @@ RUN yum install -y epel-release && \
 	wget \
 	maven
 
-# Install Apache Zeppelin version 0.7.2
-RUN wget -O /tmp/zeppelin-0.7.2-bin-netinst.tgz http://archive.apache.org/dist/zeppelin/zeppelin-0.7.2/zeppelin-0.7.2-bin-netinst.tgz && \
-	tar -zxvf /tmp/zeppelin-0.7.2-bin-netinst.tgz && \
-	rm -rf /tmp/zeppelin-0.7.2-bin-netinst.tgz && \
-	mv /zeppelin-0.7.2-bin-netinst /zeppelin
+# Install Apache Zeppelin
+RUN wget -O /tmp/zeppelin-${Z_VERSION}-bin-all.tgz http://archive.apache.org/dist/zeppelin/zeppelin-${Z_VERSION}/zeppelin-${Z_VERSION}-bin-all.tgz && \
+	tar -zxvf /tmp/zeppelin-${Z_VERSION}-bin-all.tgz && \
+	rm -rf /tmp/zeppelin-${Z_VERSION}-bin-all.tgz && \
+	mv /zeppelin-${Z_VERSION}-bin-all ${Z_HOME}
 
 # Install AWS CLI
 RUN curl -O https://bootstrap.pypa.io/get-pip.py && \
 	python get-pip.py && \
 	pip install awscli
 	
+# Package AWS CLI intepreter into a fat jar
+ADD pom.xml ${I_HOME}/pom.xml
+ADD src ${I_HOME}/src
+RUN ["mvn", "clean", "install"]
+	
 # Install AWS interpreter as a third-party interpreter
-RUN wget -O /tmp/aws-interpreter-0.0.1.jar http://s3.amazonaws.com/cloudcover-artifacts/aws-interpreter-0.0.1.jar && \
-	mvn install:install-file -Dfile=/tmp/aws-interpreter-0.0.1.jar -DgroupId=com.blacksky -DartifactId=aws-interpreter -Dversion=0.0.1 -Dpackaging=jar && \
-	/zeppelin/bin/install-interpreter.sh --name aws --artifact com.blacksky:aws-interpreter:0.0.1
+RUN mvn install:install-file -Dfile=/${I_HOME}/target/aws-interpreter-0.0.1-jar-with-dependencies.jar -DgroupId=com.blacksky -DartifactId=aws-interpreter -Dversion=0.0.1 -Dpackaging=jar && \
+	${Z_HOME}/bin/install-interpreter.sh --name aws --artifact com.blacksky:aws-interpreter:0.0.1
 
 EXPOSE 8080
 
