@@ -58,7 +58,7 @@ public class CLIExecuter implements CommandExecuter {
 					if (watchDog.killedProcess()) {
 						throw new Exception("Interpreter process destroyed. Please increase timeout property.");
 					} else {
-						throw new Exception("Invalid AWS CLI command.");
+						throw new Exception("AWS CLI command failed.");
 					}
 					
 				}
@@ -75,7 +75,7 @@ public class CLIExecuter implements CommandExecuter {
 								StandardCharsets.UTF_8
 								);
 				logger.error(e.getMessage() + errorMsg);
-				throw new Exception("Invalid AWS CLI command. " + errorMsg, e);
+				throw new Exception("AWS CLI command failed. " + errorMsg, e);
 			} finally {
 				try {
 					os.close();
