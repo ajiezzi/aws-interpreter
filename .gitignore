@@ -6,5 +6,6 @@ target
 *.settings
 *.log
 *.DS_Store
+*.idea/
 
 log4j*

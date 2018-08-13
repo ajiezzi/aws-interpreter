@@ -19,7 +19,8 @@ MAINTAINER Adam Iezzi <aiezzi@blacksky.com>
 ENV Z_HOME="/zeppelin" \
 	AWS_DEFAULT_REGION="us-east-1" \
 	AWS_DEFAULT_OUTPUT="json" \
-    I_HOME="/aws-interpreter"
+    I_HOME="/aws-interpreter" \
+    ZEPPELIN_VERSION="0.7.3"
 
 # Install basic packages
 RUN yum install -y epel-release && \
@@ -29,11 +30,11 @@ RUN yum install -y epel-release && \
 	wget \
 	maven
 
-# Install apache zeppelin version 0.7.3
-RUN wget -O /tmp/zeppelin-0.7.3-bin-all.tgz http://archive.apache.org/dist/zeppelin/zeppelin-0.7.3/zeppelin-0.7.3-bin-all.tgz && \
-	tar -zxvf /tmp/zeppelin-0.7.3-bin-all.tgz && \
-	rm -rf /tmp/zeppelin-0.7.3-bin-all.tgz && \
-	mv /zeppelin-0.7.3-bin-all /zeppelin
+# Install apache zeppelin version
+RUN wget -O /tmp/zeppelin-${ZEPPELIN_VERSION}-bin-all.tgz http://archive.apache.org/dist/zeppelin/zeppelin-${ZEPPELIN_VERSION}/zeppelin-${ZEPPELIN_VERSION}-bin-all.tgz && \
+	tar -zxvf /tmp/zeppelin-${ZEPPELIN_VERSION}-bin-all.tgz && \
+	rm -rf /tmp/zeppelin-${ZEPPELIN_VERSION}-bin-all.tgz && \
+	mv /zeppelin-${ZEPPELIN_VERSION}-bin-all /zeppelin
 
 # Install AWS CLI
 RUN curl -O https://bootstrap.pypa.io/get-pip.py && \
