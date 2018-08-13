@@ -23,18 +23,17 @@ ENV Z_HOME="/zeppelin" \
     ZEPPELIN_VERSION="0.7.3"
 
 # Install basic packages
-RUN yum install -y epel-release && \
-	yum update -y && \
-	yum install -y \
+RUN yum install -y \
 	java-1.8.0-openjdk \
 	wget \
-	maven
+	maven && \
+	yum update -y
 
 # Install apache zeppelin version
-RUN wget -O /tmp/zeppelin-${ZEPPELIN_VERSION}-bin-all.tgz http://archive.apache.org/dist/zeppelin/zeppelin-${ZEPPELIN_VERSION}/zeppelin-${ZEPPELIN_VERSION}-bin-all.tgz && \
-	tar -zxvf /tmp/zeppelin-${ZEPPELIN_VERSION}-bin-all.tgz && \
-	rm -rf /tmp/zeppelin-${ZEPPELIN_VERSION}-bin-all.tgz && \
-	mv /zeppelin-${ZEPPELIN_VERSION}-bin-all /zeppelin
+RUN wget -O /tmp/zeppelin-${ZEPPELIN_VERSION}-bin-netinst.tgz http://archive.apache.org/dist/zeppelin/zeppelin-${ZEPPELIN_VERSION}/zeppelin-${ZEPPELIN_VERSION}-bin-netinst.tgz && \
+	tar -zxvf /tmp/zeppelin-${ZEPPELIN_VERSION}-bin-netinst.tgz && \
+	rm -rf /tmp/zeppelin-${ZEPPELIN_VERSION}-bin-netinst.tgz && \
+	mv /zeppelin-${ZEPPELIN_VERSION}-bin-netinst /zeppelin
 
 # Install AWS CLI
 RUN curl -O https://bootstrap.pypa.io/get-pip.py && \
