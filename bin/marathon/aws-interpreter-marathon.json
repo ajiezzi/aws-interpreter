@@ -15,13 +15,20 @@
     "type": "DOCKER",
     "volumes": [],
     "docker": {
-      "image": "adamiezzi/aws-interpreter",
-      "portMappings": [],
+      "image": "adamiezzi/aws-interpreter:latest",
+      "portMappings": [
+      	{ 
+      		"hostPort": 8080, 
+      		"containerPort": 8080, 
+      		"protocol": "tcp" 
+      	}
+      ],
       "privileged": false,
       "parameters": [],
       "forcePullImage": true
     }
   },
+  "acceptedResourceRoles":["slave_public"],
   "healthChecks": [],
   "readinessChecks": [],
   "dependencies": [],

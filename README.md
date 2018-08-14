@@ -31,6 +31,18 @@ Maven will create the a fat jar (e.g. aws-interpreter-0.0.1-SNAPSHOT-jar-with-de
 
 ## Installation and Configuration
 
+### Building and Running the Docker container
+
+How to build the container:
+    
+    docker build .
+    docker tag <tag-id> <docker-hub-name>/aws-interpreter:latest
+    docker push <docker-hub-name>/aws-interpreter:latest
+    
+Running the container:
+
+	docker run --rm -p 8080:8080 --env-file env.list --name zeppelin <docker-hub-name>/aws-interpreter:latest
+    
 ### EMR Configuration
 
 The instructions assume both Java artifacts are already copied to the EMR master server. Zeppelin home will be found at `/usr/lib/zeppelin`. To configure the interpreter on EMR, you will need to follow these steps:
